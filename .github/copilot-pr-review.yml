@@ -1,0 +1,27 @@
+name: Copilot PR Review
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: github/copilot-preview@v1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: "**/*"
+          review-comment: true
+          review-inline: true
+          review-summary: true
+          review-security: true
+          review-performance: true
+          review-tests: true
+          review-documentation: true
+          review-style: true
+          review-best-practices: true 
