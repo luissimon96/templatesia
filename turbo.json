@@ -39,6 +39,20 @@
         "test/**/*.ts",
         "test/**/*.tsx"
       ]
+    },
+    "test:coverage": {
+      "dependsOn": [
+        "build"
+      ],
+      "outputs": [
+        "coverage/**"
+      ],
+      "inputs": [
+        "src/**/*.tsx",
+        "src/**/*.ts",
+        "test/**/*.ts",
+        "test/**/*.tsx"
+      ]
     }
   }
 }
