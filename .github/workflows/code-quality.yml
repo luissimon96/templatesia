@@ -41,7 +41,7 @@ jobs:
         uses: SonarSource/sonarcloud-github-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} #1b7806c488be1249e983a147a21257a1594537d7
         with:
           args: >
             -Dsonar.organization=luissimon96

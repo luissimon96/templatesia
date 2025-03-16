@@ -1,0 +1,102 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("MONGO_URI")
+}
+
+model User {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  email         String    @unique
+  name          String
+  username      String    @unique
+  password      String
+  avatar        String?
+  bio           String?
+  role          Role      @default(USER)
+  reputation    Int       @default(0)
+  githubId      String?   @unique
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  lastLogin     DateTime?
+  isVerified    Boolean   @default(false)
+  is2FAEnabled  Boolean   @default(false)
+  preferences   Json
+  templates     Template[]
+  reviews       Review[]
+}
+
+model Template {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  title         String
+  description   String
+  content       String
+  version       String
+  author        User      @relation(fields: [authorId], references: [id])
+  authorId      String    @db.ObjectId
+  category      Category  @relation(fields: [categoryId], references: [id])
+  categoryId    String    @db.ObjectId
+  tags          Tag[]     @relation(fields: [tagIds], references: [id])
+  tagIds        String[]  @db.ObjectId
+  framework     String
+  language      String
+  dependencies  Json[]
+  likes         Int       @default(0)
+  downloads     Int       @default(0)
+  rating        Float     @default(0)
+  isPublic      Boolean   @default(true)
+  isVerified    Boolean   @default(false)
+  pricing       Pricing   @default(FREE)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  reviews       Review[]
+}
+
+model Review {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  template    Template  @relation(fields: [templateId], references: [id])
+  templateId  String    @db.ObjectId
+  author      User      @relation(fields: [authorId], references: [id])
+  authorId    String    @db.ObjectId
+  rating      Int
+  comment     String
+  likes       Int       @default(0)
+  isVerified  Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Category {
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  description String
+  slug        String     @unique
+  icon        String
+  parentId    String?    @db.ObjectId
+  parent      Category?  @relation("SubCategories", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  children    Category[] @relation("SubCategories")
+  templates   Template[]
+  isActive    Boolean    @default(true)
+}
+
+model Tag {
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  slug        String     @unique
+  count       Int        @default(0)
+  templates   Template[] @relation(fields: [templateIds], references: [id])
+  templateIds String[]   @db.ObjectId
+}
+
+enum Role {
+  USER
+  PRO
+  ADMIN
+}
+
+enum Pricing {
+  FREE
+  PRO
+} 

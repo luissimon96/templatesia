@@ -1,0 +1,168 @@
+# Dependências
+node_modules
+.pnp
+.pnp.js
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+
+# Arquivos de build
+.next/
+out/
+build/
+dist/
+.turbo/
+.vercel/
+storybook-static/
+
+# Cache
+.swc/
+.eslintcache
+.stylelintcache
+*.tsbuildinfo
+next-env.d.ts
+
+# Variáveis de ambiente
+.env
+.env.*
+!.env.example
+!.env.template
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Cobertura de testes
+coverage
+.nyc_output
+
+# Arquivos do sistema operacional
+.DS_Store
+Thumbs.db
+*.pem
+
+# Arquivos de IDE
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Arquivos específicos do Turborepo
+.turbo
+
+# Arquivos específicos do Next.js
+.next/
+out/
+.cache/
+public/sitemap*.xml
+public/robots.txt
+public/feed.xml
+
+# Arquivos específicos do Prisma
+prisma/.env
+prisma/migrations/
+prisma/dev.db
+prisma/dev.db-journal
+
+# Arquivos específicos do Docker
+.docker/data/
+
+# Arquivos temporários
+tmp/
+temp/
+
+# Arquivos de debug
+.debug/
+
+# Arquivos específicos do MongoDB
+*.mongodb
+
+# Arquivos específicos do Redis
+dump.rdb
+
+# Arquivos específicos do Vercel
+.vercel
+
+# Arquivos específicos do Netlify
+.netlify
+
+# Arquivos específicos do Cloudflare
+.cloudflare
+
+# Arquivos específicos do Sentry
+.sentryclirc
+
+# Arquivos específicos do Storybook
+storybook-static/
+
+# Arquivos específicos do Cypress
+cypress/videos/
+cypress/screenshots/
+
+# Arquivos específicos do Playwright
+test-results/
+playwright-report/
+playwright/.cache/
+
+# Arquivos específicos do Jest
+jest-cache/
+
+# Arquivos específicos do ESLint
+.eslintcache
+
+# Arquivos específicos do Prettier
+.prettierignore
+
+# Arquivos específicos do Stylelint
+.stylelintcache
+
+# Arquivos específicos do TypeScript
+*.tsbuildinfo
+
+# Arquivos específicos do Webpack
+.webpack/
+
+# Arquivos específicos do Babel
+.babel-cache/
+
+# Arquivos específicos do Rollup
+.rollup.cache/
+
+# Arquivos específicos do Vite
+.vite/
+
+# Arquivos específicos do Nx
+.nx/
+
+# Arquivos específicos do Lerna
+lerna-debug.log
+
+# Arquivos específicos do Yarn
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
+# Arquivos específicos do NPM
+.npm
+
+# Arquivos específicos do PNPM
+.pnpm-store/
+
+# Arquivos específicos do Turborepo
+.turbo
