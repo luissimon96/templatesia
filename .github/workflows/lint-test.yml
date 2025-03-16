@@ -1,0 +1,85 @@
+name: Lint e Testes
+
+on:
+  workflow_dispatch:
+    inputs:
+      test_scope:
+        description: 'Escopo dos testes'
+        required: true
+        default: 'full'
+        type: choice
+        options:
+          - full
+          - unit
+          - e2e
+          - lint
+  push:
+    tags:
+      - 'test-*'
+      - 'release-*'
+
+jobs:
+  lint-test:
+    name: Lint e Testes
+    runs-on: ubuntu-latest
+    if: github.event.inputs.test_scope == 'full' || github.event.inputs.test_scope == 'unit' || github.event.inputs.test_scope == 'lint'
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Run ESLint
+        if: github.event.inputs.test_scope == 'full' || github.event.inputs.test_scope == 'lint'
+        run: npm run lint
+        
+      - name: Type check
+        if: github.event.inputs.test_scope == 'full' || github.event.inputs.test_scope == 'lint'
+        run: npm run type-check
+        
+      - name: Run tests
+        if: github.event.inputs.test_scope == 'full' || github.event.inputs.test_scope == 'unit'
+        run: npm run test
+        
+      - name: Check formatting
+        if: github.event.inputs.test_scope == 'full' || github.event.inputs.test_scope == 'lint'
+        run: npm run format:check
+        
+  e2e-tests:
+    name: Testes E2E
+    runs-on: ubuntu-latest
+    if: github.event.inputs.test_scope == 'full' || github.event.inputs.test_scope == 'e2e'
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Install Playwright
+        run: npx playwright install --with-deps
+        
+      - name: Build application
+        run: npm run build
+        
+      - name: Run E2E tests
+        run: npm run test:e2e
+        
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30 

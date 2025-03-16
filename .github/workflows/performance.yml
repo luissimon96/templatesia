@@ -1,0 +1,74 @@
+name: Análise de Performance
+
+on:
+  workflow_dispatch:
+    inputs:
+      analysis_type:
+        description: 'Tipo de análise'
+        required: true
+        default: 'full'
+        type: choice
+        options:
+          - full
+          - lighthouse
+          - bundle
+  push:
+    tags:
+      - 'perf-*'
+      - 'release-*'
+
+jobs:
+  lighthouse:
+    name: Lighthouse Check
+    runs-on: ubuntu-latest
+    if: github.event.inputs.analysis_type == 'full' || github.event.inputs.analysis_type == 'lighthouse'
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Build application
+        run: npm run build
+        
+      - name: Start server
+        run: npm run start & npx wait-on http://localhost:3000
+        
+      - name: Run Lighthouse CI
+        uses: treosh/lighthouse-ci-action@v10
+        with:
+          urls: |
+            http://localhost:3000
+            http://localhost:3000/templates
+          uploadArtifacts: true
+          temporaryPublicStorage: true
+          
+  bundle-analysis:
+    name: Bundle Analysis
+    runs-on: ubuntu-latest
+    if: github.event.inputs.analysis_type == 'full' || github.event.inputs.analysis_type == 'bundle'
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Build with bundle analysis
+        run: ANALYZE=true npm run build
+        
+      - name: Upload bundle stats
+        uses: actions/upload-artifact@v3
+        with:
+          name: bundle-analysis
+          path: .next/analyze
+          retention-days: 30 
