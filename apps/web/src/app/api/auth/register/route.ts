@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
-import { hash } from 'bcrypt';
 import { z } from 'zod';
-import { addUser } from '../[...nextauth]/route';
+import { addUser, hashPassword } from '@/lib/users';
 
 // Schema de validação para o registro
 const registerSchema = z.object({
@@ -47,7 +46,7 @@ export async function POST(req: Request) {
     }
 
     // Hash da senha
-    const hashedPassword = await hash(password, 10);
+    const hashedPassword = hashPassword(password);
 
     // Criar usuário usando a função addUser do NextAuth
     const user = await addUser({

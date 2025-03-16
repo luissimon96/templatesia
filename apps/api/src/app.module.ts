@@ -3,10 +3,6 @@ import { ConfigModule } from '@nestjs/config';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
-import { TemplatesModule } from './templates/templates.module';
-import { CategoriesModule } from './categories/categories.module';
-import { TagsModule } from './tags/tags.module';
-import { ReviewsModule } from './reviews/reviews.module';
 import { validate } from './config/env.validation';
 
 @Module({
@@ -26,10 +22,6 @@ import { validate } from './config/env.validation';
     // Módulos da aplicação
     AuthModule,
     UsersModule,
-    TemplatesModule,
-    CategoriesModule,
-    TagsModule,
-    ReviewsModule,
   ],
 })
 export class AppModule { } 
