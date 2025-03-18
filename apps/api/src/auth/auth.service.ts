@@ -19,21 +19,15 @@ export class AuthService {
       throw new ConflictException('Email já está em uso');
     }
 
-    // Hash da senha
-    const hashedPassword = await bcrypt.hash(registerDto.password, 10);
-
-    // Criar o usuário
-    const user = await this.usersService.create({
-      ...registerDto,
-      password: hashedPassword,
-    });
+    // Criar o usuário (a hash da senha é feita no serviço de usuários)
+    const user = await this.usersService.create(registerDto);
 
     // Gerar token JWT
     const token = this.generateToken(user);
 
     return {
       user: {
-        id: user.id,
+        id: user._id,
         name: user.name,
         email: user.email,
       },
@@ -59,7 +53,7 @@ export class AuthService {
 
     return {
       user: {
-        id: user.id,
+        id: user._id,
         name: user.name,
         email: user.email,
       },
@@ -72,7 +66,7 @@ export class AuthService {
   }
 
   private generateToken(user: any) {
-    const payload = { sub: user.id, email: user.email };
+    const payload = { sub: user._id, email: user.email };
     return this.jwtService.sign(payload);
   }
 } 

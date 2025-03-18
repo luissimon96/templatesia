@@ -80,22 +80,8 @@ export default function SignupPage() {
       // Se chegou aqui, o registro foi bem-sucedido
       console.log('Usuário registrado com sucesso:', data);
 
-      // Login automático após o cadastro
-      const signInResult = await signIn('credentials', {
-        redirect: false,
-        email: formData.email,
-        password: formData.password,
-      });
-
-      if (signInResult?.error) {
-        console.error('Erro ao fazer login automático:', signInResult.error);
-        // Mesmo com erro no login automático, redirecionar para login
-        router.push('/login?registered=true');
-        return;
-      }
-
-      // Redirecionar para o dashboard
-      router.push('/dashboard');
+      // Redirecionar para a página de login com mensagem de sucesso
+      router.push('/login?registered=true');
     } catch (error: any) {
       console.error('Erro no cadastro:', error);
       setError(error.message || 'Ocorreu um erro ao criar sua conta. Tente novamente.');

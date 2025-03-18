@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { signIn } from 'next-auth/react';
 import Link from 'next/link';
 import { Button } from '../../components/ui/button';
@@ -10,15 +10,26 @@ import { GRADIENTS } from '../../lib/constants';
 
 export default function LoginPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+
+  // Verificar se há mensagem de sucesso na URL (ex: após registro)
+  useEffect(() => {
+    const registered = searchParams.get('registered');
+    if (registered === 'true') {
+      setSuccess('Cadastro realizado com sucesso! Faça seu login para continuar.');
+    }
+  }, [searchParams]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     setError('');
+    setSuccess('');
 
     try {
       const result = await signIn('credentials', {
@@ -33,8 +44,10 @@ export default function LoginPage() {
         return;
       }
 
+      // Redirecionar para o dashboard em caso de sucesso
       router.push('/dashboard');
     } catch (error) {
+      console.error('Erro no login:', error);
       setError('Ocorreu um erro ao fazer login. Tente novamente.');
       setIsLoading(false);
     }
@@ -53,6 +66,12 @@ export default function LoginPage() {
           {error && (
             <div className="bg-red-50 text-red-600 p-3 rounded-lg mb-6 text-sm">
               {error}
+            </div>
+          )}
+
+          {success && (
+            <div className="bg-green-50 text-green-600 p-3 rounded-lg mb-6 text-sm">
+              {success}
             </div>
           )}
 

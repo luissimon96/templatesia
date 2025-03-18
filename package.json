@@ -8,12 +8,14 @@
     "packages/*"
   ],
   "scripts": {
-    "dev": "turbo run dev",
-    "build": "turbo run build",
-    "start": "turbo run start",
-    "lint": "turbo run lint",
-    "test": "turbo run test",
-    "test:coverage": "turbo run test:coverage",
+    "dev:web": "cd apps/web && npm run dev",
+    "dev:api": "cd apps/api && npm run start:dev",
+    "build:web": "cd apps/web && npm run build",
+    "build:api": "cd apps/api && npm run build",
+    "start:web": "cd apps/web && npm run start",
+    "start:api": "cd apps/api && npm run start",
+    "test:web": "cd apps/web && npm run test",
+    "test:api": "cd apps/api && npm run test",
     "test:web:coverage": "cd apps/web && npm run test:coverage",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
@@ -26,8 +28,7 @@
     "@commitlint/config-conventional": "^18.6.2",
     "@playwright/test": "^1.41.2",
     "husky": "^9.0.11",
-    "prettier": "^3.2.5",
-    "turbo": "^1.12.4"
+    "prettier": "^3.2.5"
   },
   "engines": {
     "node": ">=18.0.0"

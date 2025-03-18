@@ -4,45 +4,55 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import compression from 'compression';
 import helmet from 'helmet';
 import { AppModule } from './app.module';
+import { env } from './config';
+import logger from './utils/logger';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  try {
+    // Criar a aplicação NestJS
+    const app = await NestFactory.create(AppModule, {
+      logger: ['error', 'warn', 'log', 'debug'],
+    });
 
-  // Configurações de segurança
-  app.use(helmet());
-  app.enableCors({
-    origin: process.env.CORS_ORIGIN,
-    credentials: true,
-  });
+    // Configurar middlewares de segurança
+    app.use(helmet());
+    app.use(compression());
 
-  // Compressão de resposta
-  app.use(compression());
+    // Habilitar CORS
+    app.enableCors({
+      origin: env.CORS_ORIGIN,
+      methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+      credentials: true,
+    });
 
-  // Validação global
-  app.useGlobalPipes(
-    new ValidationPipe({
+    // Configurar validação global
+    app.useGlobalPipes(new ValidationPipe({
       whitelist: true,
-      forbidNonWhitelisted: true,
       transform: true,
-    }),
-  );
+      transformOptions: { enableImplicitConversion: true },
+    }));
 
-  // Configuração do Swagger
-  const config = new DocumentBuilder()
-    .setTitle('Templatesia API')
-    .setDescription('API da plataforma Templatesia')
-    .setVersion('1.0')
-    .addBearerAuth()
-    .build();
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api/docs', app, document);
+    // Configurar Swagger
+    const config = new DocumentBuilder()
+      .setTitle('Templatesia API')
+      .setDescription('API para a plataforma Templatesia')
+      .setVersion('1.0')
+      .addBearerAuth()
+      .build();
+    const document = SwaggerModule.createDocument(app, config);
+    SwaggerModule.setup('docs', app, document);
 
-  // Prefixo global da API
-  app.setGlobalPrefix('api');
-
-  const port = process.env.PORT || 3001;
-  await app.listen(port);
-  console.log(`Application is running on: http://localhost:${port}`);
+    // Iniciar o servidor
+    await app.listen(env.PORT);
+    logger.info(`🚀 Servidor iniciado em http://localhost:${env.PORT}`);
+    logger.info(`📚 Documentação Swagger disponível em http://localhost:${env.PORT}/docs`);
+  } catch (error) {
+    logger.error('❌ Falha ao iniciar o servidor:', error);
+    process.exit(1);
+  }
 }
 
-bootstrap(); 
+bootstrap().catch(err => {
+  logger.error('❌ Erro fatal:', err);
+  process.exit(1);
+}); 
