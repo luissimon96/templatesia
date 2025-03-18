@@ -94,14 +94,6 @@ const handler = NextAuth({
         }
       },
     }),
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID || '',
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
-    }),
-    GithubProvider({
-      clientId: process.env.GITHUB_CLIENT_ID || '',
-      clientSecret: process.env.GITHUB_CLIENT_SECRET || '',
-    }),
   ],
   pages: {
     signIn: '/login',
@@ -129,6 +121,7 @@ const handler = NextAuth({
   },
 });
 
+<<<<<<< HEAD
 export { handler as GET, handler as POST };
 
 // Adicionar usuário à coleção de usuários
@@ -170,4 +163,7 @@ export async function addUser(user: { name: string; email: string; password: str
       await client.close();
     }
   }
-} 
+}
+=======
+export { handler as GET, handler as POST };
+>>>>>>> dac5285b2e7058f2342b330a60f10e22fc903b4e

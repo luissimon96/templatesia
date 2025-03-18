@@ -1,5 +1,4 @@
 import { NextResponse } from 'next/server';
-import { hash } from 'bcrypt';
 import { z } from 'zod';
 import { MongoClient, ObjectId } from 'mongodb';
 
@@ -85,8 +84,12 @@ export async function POST(req: Request) {
     }
 
     // Hash da senha
+<<<<<<< HEAD
     console.log('Gerando hash da senha');
     const hashedPassword = await hash(password, 10);
+=======
+    const hashedPassword = hashPassword(password);
+>>>>>>> dac5285b2e7058f2342b330a60f10e22fc903b4e
 
     // Criar usuário
     console.log('Criando usuário no MongoDB');
