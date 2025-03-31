@@ -1,0 +1,31 @@
+# Arquivos de build
+**/dist
+**/build
+**/.webpack
+
+# Diretórios de dependências
+**/node_modules
+
+# Caches
+**/.cache
+**/.turbo
+
+# Arquivos de ambiente
+**/.env
+**/.env.*
+!**/.env.example
+
+# Arquivos de logs
+**/logs
+**/*.log
+
+# Diretórios de testes
+**/coverage
+**/.nyc_output
+
+# Outros
+**/.DS_Store
+**/.git
+**/.github
+**/.vscode
+**/.idea 

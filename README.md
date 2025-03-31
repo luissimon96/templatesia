@@ -13,87 +13,29 @@ Templatesia é uma plataforma que une IA especializada em código com uma comuni
 
 ## Tecnologias
 
-- **Frontend**: Next.js 14, React, TypeScript, Tailwind CSS
-- **Backend**: NestJS, Prisma, MongoDB
+### Frontend
+- **Framework**: Next.js 14 (App Router)
+- **Linguagem**: TypeScript
+- **Estilização**: Tailwind CSS + Shadcn/ui
+- **Gerenciamento de Estado**: Zustand, React Query
 - **Autenticação**: NextAuth.js
+
+### Backend
+- **Framework**: NestJS 10
+- **Linguagem**: TypeScript
+- **Banco de Dados**: MongoDB
+- **Cache**: Redis
+- **Autenticação**: JWT, Passport
+- **Documentação**: Swagger/OpenAPI
+- **Validação**: class-validator, class-transformer
+
+### Infraestrutura
 - **Monorepo**: Turborepo
+- **Gerenciamento de Dependências**: npm
+- **Variáveis de Ambiente**: dotenv
+- **Builds**: Webpack
 
-## Arquivos de Configuração
-
-### .gitignore e .dockerignore
-
-O projeto inclui arquivos de configuração abrangentes para garantir que apenas os arquivos necessários sejam versionados e incluídos nas imagens Docker:
-
-- **`.gitignore`**: Configurado para excluir:
-  - Dependências (`node_modules`, etc.)
-  - Arquivos de build (`.next/`, `dist/`, etc.)
-  - Variáveis de ambiente (`.env`, `.env.*`)
-  - Arquivos de cache e logs
-  - Arquivos específicos de IDE e sistema operacional
-  - Arquivos temporários e de debug
-
-- **`.dockerignore`**: Otimizado para criar imagens Docker mais leves, excluindo:
-  - Arquivos de controle de versão (`.git/`, etc.)
-  - Arquivos de configuração de desenvolvimento
-  - Documentação e arquivos de teste
-  - Logs e arquivos temporários
-
-### Variáveis de Ambiente
-
-Um arquivo `.env.example` é fornecido como modelo para configurar as variáveis de ambiente necessárias para o projeto. Para começar:
-
-```bash
-cp .env.example .env
-```
-
-Edite o arquivo `.env` com suas configurações específicas.
-
-## Design System
-
-### Cores
-
-O Templatesia utiliza uma paleta de cores moderna e acessível:
-
-#### Cores Primárias
-
-- **Azul**: `#3B82F6` (primary-500)
-- **Indigo**: `#6366F1` (secondary-500)
-- **Roxo**: `#8B5CF6` (accent-500)
-
-#### Gradientes
-
-- **Primário**: `bg-gradient-to-r from-blue-600 to-indigo-700`
-- **Secundário**: `bg-gradient-to-r from-indigo-600 to-purple-700`
-- **Destaque**: `bg-gradient-to-r from-purple-600 to-pink-600`
-
-#### Cores de Estado
-
-- **Sucesso**: `#10B981` (Verde)
-- **Alerta**: `#F59E0B` (Amarelo)
-- **Erro**: `#EF4444` (Vermelho)
-- **Informação**: `#3B82F6` (Azul)
-
-### Tipografia
-
-#### Fontes
-
-- **Principal**: Inter (sans-serif)
-- **Código**: Monospace
-
-#### Tamanhos de Fonte
-
-- Extra pequeno: 0.75rem (12px)
-- Pequeno: 0.875rem (14px)
-- Base: 1rem (16px)
-- Grande: 1.125rem (18px)
-- Extra grande: 1.25rem (20px)
-- 2XL: 1.5rem (24px)
-- 3XL: 1.875rem (30px)
-- 4XL: 2.25rem (36px)
-- 5XL: 3rem (48px)
-- 6XL: 3.75rem (60px)
-
-## Estrutura do Projeto
+## Arquitetura do Projeto
 
 ```
 templatesia/
@@ -114,7 +56,8 @@ templatesia/
 
 - Node.js 18+
 - MongoDB
-- Yarn ou NPM
+- Redis (opcional para cache)
+- npm ou yarn
 
 ### Instalação
 
@@ -131,17 +74,140 @@ templatesia/
    npm install
    ```
 
-3. Configure as variáveis de ambiente
+3. Configure as variáveis de ambiente (já existe um arquivo .env na raiz do projeto)
 
    ```bash
-   cp .env.example .env
+   # Verifique o arquivo .env e ajuste conforme necessário
    ```
 
-4. Inicie o servidor de desenvolvimento
+4. Inicialize o servidor API
 
    ```bash
-   npm run dev
+   # Método simplificado (na raiz do projeto)
+   npm run api
+   
+   # OU individualmente
+   npm run api:build
+   npm run api:start
    ```
+
+   O servidor API estará disponível em http://localhost:3000/api
+   A documentação Swagger estará disponível em http://localhost:3000/api/docs
+
+5. Inicialize o frontend
+
+   ```bash
+   # Em outro terminal, na pasta raiz do projeto
+   npm run web
+   ```
+
+   A aplicação web estará disponível em http://localhost:3000
+
+### Scripts Disponíveis
+
+#### Projeto Raiz
+```bash
+npm run dev        # Executa todos os projetos em modo de desenvolvimento
+npm run build      # Compila todos os projetos
+npm run lint       # Executa linting em todos os projetos
+npm run api        # Compila e inicia a API usando o arquivo .env da raiz
+npm run api:build  # Apenas compila a API
+npm run api:start  # Apenas inicia a API usando o arquivo .env da raiz
+npm run web        # Inicia o frontend
+```
+
+#### API (apps/api)
+```bash
+npm run build              # Compila o projeto
+npm run dev                # Inicia o servidor em modo de desenvolvimento
+npm run dev:clean          # Limpa cache e inicia o servidor
+npm run dev:fresh          # Remove diretórios de build e inicia o servidor
+npm run dev:root-env       # Inicia o servidor usando o arquivo .env da raiz
+```
+
+#### Web (apps/web)
+```bash
+npm run dev        # Inicia o servidor Next.js em modo de desenvolvimento
+npm run build      # Compila o projeto para produção
+npm run start      # Inicia o servidor compilado
+```
+
+## Variáveis de Ambiente
+
+O arquivo `.env` na raiz do projeto contém todas as configurações necessárias:
+
+```bash
+# Ambiente
+NODE_ENV=development
+
+# API
+API_PORT=3000
+API_URL=http://localhost:3000
+CORS_ORIGIN=http://localhost:3000
+
+# MongoDB
+MONGO_URI=mongodb://localhost:27017/templatesia
+
+# JWT
+JWT_SECRET=seu_segredo_aqui
+JWT_EXPIRATION=7d
+
+# Frontend
+NEXT_PUBLIC_API_URL=http://localhost:3000
+
+# NextAuth
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=seu_segredo_aqui
+```
+
+## Configurações Específicas
+
+### NestJS (Backend)
+- **Swagger**: Disponível em `/api/docs`
+- **Rotas API**: Todas as rotas usam o prefixo `/api`
+- **Autenticação**: JWT com Passport
+- **Validação**: Usa class-validator para DTOs
+
+### Next.js (Frontend)
+- **Rotas**: Utiliza o App Router do Next.js 14
+- **Autenticação**: NextAuth.js integrado
+- **Componentes**: Utiliza Shadcn/ui com Tailwind
+
+## Solução de Problemas (Troubleshooting)
+
+### Problemas Comuns e Soluções
+
+#### 1. Erro "LRU is not a constructor"
+- **Problema**: Incompatibilidade com a dependência `lru-cache` usada pelo pacote `semver`.
+- **Solução**: Instale a versão 6.0.0 do `lru-cache`:
+  ```bash
+  cd apps/api
+  npm install lru-cache@6.0.0 --save-dev
+  ```
+
+#### 2. Variáveis de ambiente não carregadas corretamente
+- **Problema**: Múltiplos arquivos `.env` causando conflitos.
+- **Solução**: Use apenas o arquivo `.env` na raiz e carregue-o explicitamente na API:
+  ```bash
+  # Remova outros arquivos .env em subdiretórios
+  cd apps/api
+  npm run dev:root-env  # Script que carrega o .env da raiz
+  ```
+
+#### 3. Conflito de portas entre API e frontend
+- **Problema**: Tanto a API quanto o frontend tentam usar a mesma porta.
+- **Solução**: Configure a API para usar uma porta específica (3000) no arquivo `.env`.
+
+#### 4. API não inicializa com o comando padrão
+- **Problema**: Comando `npm run dev` na raiz não carrega as variáveis de ambiente corretamente.
+- **Solução**: Use scripts especializados que foram adicionados ao `package.json` da raiz:
+  ```bash
+  npm run api  # Compila e inicia a API com configuração correta
+  ```
+
+#### 5. Remoção de dependências não utilizadas
+- **Problema**: Referências a ferramentas não utilizadas no projeto (como Snyk).
+- **Solução**: As referências ao Snyk foram removidas do README. Os workflows do GitHub mencionados no README são mantidos para documentação, mas localmente não há dependência do Snyk instalada.
 
 ## Contribuição
 
@@ -150,6 +216,13 @@ Contribuições são bem-vindas! Por favor, leia as diretrizes de contribuição
 ## Licença
 
 Este projeto está licenciado sob a licença MIT - veja o arquivo LICENSE para mais detalhes.
+
+## Suporte
+
+- 📧 Email: <luissimonazure@gmail.com>
+- 💭 Discord: [Junte-se ao nosso servidor](https://discord.gg/templatesia)
+- 📚 Documentação: [docs.templatesia.com](https://docs.templatesia.com)
+- 🐛 Issues: [GitHub Issues](https://github.com/templatesia/issues)
 
 ## 📑 Índice
 
@@ -461,7 +534,6 @@ sonar.javascript.lcov.reportPaths=coverage/lcov.info
 
 - **Ferramentas**:
   - OWASP Dependency Check
-  - Snyk
   - CodeQL
 - **Quando Executa**:
   - Em pushes e PRs para `main`
@@ -566,7 +638,6 @@ Para que os workflows funcionem corretamente, você precisa configurar os seguin
 |-------|-----------|------------|
 | `GITHUB_TOKEN` | Automático | Fornecido automaticamente pelo GitHub |
 | `SONAR_TOKEN` | Token do SonarCloud | [SonarCloud Account](https://sonarcloud.io/account/security) |
-| `SNYK_TOKEN` | Token do Snyk | [Snyk Account Settings](https://app.snyk.io/account) |
 
 #### 2. Como Configurar
 
@@ -590,15 +661,6 @@ Para que os workflows funcionem corretamente, você precisa configurar os seguin
    4. Gere um novo token
    ```
 
-   b) **SNYK_TOKEN**:
-
-   ```bash
-   1. Crie uma conta no Snyk
-   2. Vá em Account Settings
-   3. Localize "Auth Token"
-   4. Copie o token existente ou gere um novo
-   ```
-
 #### 3. Verificação da Configuração
 
 Para verificar se os tokens estão configurados corretamente:
@@ -610,33 +672,6 @@ Para verificar se os tokens estão configurados corretamente:
 git tag quality-test
 git push origin quality-test
 ```
-
-2. **Snyk**:
-
-```bash
-# Execute a análise de segurança
-git tag security-test
-git push origin security-test
-```
-
-#### 4. Troubleshooting
-
-Se encontrar erros relacionados a tokens:
-
-1. **Erro de Autenticação**:
-   - Verifique se o token está correto
-   - Confirme se o nome do secret está exato
-   - Verifique as permissões do token
-
-2. **Token Expirado**:
-   - Gere um novo token
-   - Atualize o secret no GitHub
-   - Execute o workflow novamente
-
-3. **Permissões Insuficientes**:
-   - Verifique as permissões do token
-   - Confirme se a organização tem acesso
-   - Verifique as permissões do repositório
 
 ## 📊 Modelagem de Dados
 
@@ -757,197 +792,4 @@ erDiagram
     Template }o--|| Category : "belongs_to"
     Template }o--o{ Tag : "has"
     Category ||--o{ Category : "has_subcategories"
-```
-
-### Índices MongoDB
-
-```javascript
-// Users Collection
-db.users.createIndex({ "email": 1 }, { unique: true })
-db.users.createIndex({ "username": 1 }, { unique: true })
-db.users.createIndex({ "githubId": 1 })
-
-// Templates Collection
-db.templates.createIndex({ "title": "text", "description": "text" })
-db.templates.createIndex({ "author": 1 })
-db.templates.createIndex({ "category": 1 })
-db.templates.createIndex({ "tags": 1 })
-db.templates.createIndex({ "pricing": 1 })
-db.templates.createIndex({ "isPublic": 1 })
-
-// Reviews Collection
-db.reviews.createIndex({ "template": 1 })
-db.reviews.createIndex({ "author": 1 })
-
-// Categories Collection
-db.categories.createIndex({ "slug": 1 }, { unique: true })
-db.categories.createIndex({ "parentId": 1 })
-
-// Tags Collection
-db.tags.createIndex({ "slug": 1 }, { unique: true })
-db.tags.createIndex({ "name": "text" })
-```
-
-### Validações MongoDB
-
-```javascript
-// Exemplo de schema validation para Templates
-db.createCollection("templates", {
-  validator: {
-    $jsonSchema: {
-      bsonType: "object",
-      required: ["title", "description", "content", "author", "category"],
-      properties: {
-        title: {
-          bsonType: "string",
-          minLength: 3,
-          maxLength: 100
-        },
-        description: {
-          bsonType: "string",
-          maxLength: 500
-        },
-        rating: {
-          bsonType: "number",
-          minimum: 0,
-          maximum: 5
-        }
-      }
-    }
-  }
-})
-```
-
-### Cache Strategy
-
-```typescript
-// Configuração Redis
-interface CacheConfig {
-  // Templates populares (1 hora)
-  'popular-templates': {
-    ttl: 3600,
-    keys: ['category', 'page', 'limit']
-  },
-  // Detalhes do template (15 minutos)
-  'template-details': {
-    ttl: 900,
-    keys: ['templateId']
-  },
-  // Contadores (1 minuto)
-  'template-counters': {
-    ttl: 60,
-    keys: ['templateId', 'type']
-  }
-}
-```
-
-### Migrations
-
-Manteremos um controle de versão do banco de dados usando migrations:
-
-```bash
-migrations/
-├── 20240316000000-initial-schema.js
-├── 20240316000001-add-user-preferences.js
-├── 20240316000002-add-template-pricing.js
-└── 20240316000003-add-review-verification.js
-```
-
-### Backup Strategy
-
-1. **Backup Completo**: Diário (00:00 UTC)
-2. **Backup Incremental**: A cada 6 horas
-3. **Retenção**:
-   - Diários: 7 dias
-   - Semanais: 4 semanas
-   - Mensais: 12 meses
-
-### Monitoramento
-
-Métricas principais a serem monitoradas:
-
-1. **Performance**:
-   - Tempo médio de query
-   - Índices mais utilizados
-   - Tamanho das coleções
-
-2. **Operacional**:
-   - Número de conexões
-   - Taxa de cache hit/miss
-   - Uso de memória
-
-3. **Negócio**:
-   - Templates criados/dia
-   - Reviews/dia
-   - Taxa de conversão free/pro
-
-## 🔧 Serviços Locais
-
-O projeto inclui serviços locais alternativos para desenvolvimento, eliminando a necessidade de serviços pagos:
-
-### Serviços Disponíveis
-
-| Serviço | Descrição | URL Local | Alternativa Para |
-|---------|-----------|-----------|------------------|
-| MinIO | Armazenamento de objetos | <http://localhost:9011> | Cloudinary |
-| Graylog | Gerenciamento de logs | <http://localhost:9100> | Sentry |
-| Redis | Cache e filas | localhost:6379 | Redis Cloud |
-
-### Configuração dos Serviços
-
-#### MinIO (Alternativa ao Cloudinary)
-
-- **Interface Admin**: <http://localhost:9011>
-- **Endpoint S3**: <http://localhost:9010>
-- **Credenciais**:
-  - Usuário: `templatesia`
-  - Senha: `templatesia123`
-- **Configuração**:
-  1. Acesse a interface web
-  2. Crie um bucket chamado `templatesia`
-  3. Configure as permissões para acesso público
-
-#### SonarCloud (Análise de Qualidade de Código)
-
-- **Interface**: <https://sonarcloud.io>
-- **Configuração**:
-  1. Crie uma conta no SonarCloud
-  2. Configure a integração com o GitHub
-  3. Gere um token de acesso
-  4. Atualize o `SONAR_TOKEN` no arquivo `.env`
-
-#### Graylog (Alternativa ao Sentry)
-
-- **Interface**: <http://localhost:9100>
-- **Credenciais Padrão**:
-  - Usuário: `admin`
-  - Senha: `admin`
-- **Configuração**:
-  1. Configure um input GELF UDP na porta 12201
-  2. Crie um stream para capturar os logs da aplicação
-  3. Gere um token de API
-  4. Atualize o `GRAYLOG_TOKEN` no arquivo `.env`
-
-### Uso no Código
-
-```typescript
-// Exemplo de uso do MinIO (em vez do Cloudinary)
-import { S3Client } from '@aws-sdk/client-s3';
-
-const s3Client = new S3Client({
-  endpoint: process.env.MINIO_ENDPOINT,
-  credentials: {
-    accessKeyId: process.env.MINIO_ACCESS_KEY!,
-    secretAccessKey: process.env.MINIO_SECRET_KEY!,
-  },
-  forcePathStyle: true, // Necessário para MinIO
-});
-
-// Exemplo de uso do Graylog (em vez do Sentry)
-import { graylog2 } from 'graylog2';
-
-const graylog = new graylog2.Client({
-  servers: [process.env.GRAYLOG_URL!],
-  token: process.env.GRAYLOG_TOKEN
-});
 ```

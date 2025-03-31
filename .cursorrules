@@ -1,0 +1,55 @@
+{
+  "projectType": "NestJS/TypeScript/Prisma/MongoDB",
+  "objective": "Manter uma compreensão abrangente da base de código, incluindo modelos de dados, lógica de negócios e endpoints de API, para facilitar o desenvolvimento e depuração eficientes.",
+  "context": {
+    "priorityFiles": [
+      "@Files apps/api/src/main.ts",
+      "@Files apps/api/src/app.module.ts",
+      "@Files packages/database/prisma/schema.prisma"
+    ],
+    "relevantTools": ["@Docs", "@Git", "@Codebase", "@Web"],
+    "database": {
+      "orm": "Prisma",
+      "provider": "MongoDB",
+      "connectionString": "MONGO_URI"
+    }
+  },
+  "codingStandards": {
+    "namingConventions": "Use camelCase para variáveis e funções, PascalCase para classes e interfaces.",
+    "errorHandling": "Implementar tratamento robusto de erros com blocos try-catch e mensagens de erro informativas.",
+    "testing": "Escrever testes unitários para todos os modelos e controladores usando Jest."
+  },
+  "toolUsageGuidelines": {
+    "docsPriority": "Sempre consulte @Docs primeiro para documentação interna.",
+    "gitAndFolders": "Use @Git e @Folders juntos para entender a estrutura e o histórico do código.",
+    "webForExternal": "Use @Web para documentação externa e melhores práticas.",
+    "complexTasks": "Divida tarefas complexas em etapas menores com chamadas de ferramentas individuais."
+  },
+  "interactionGuidelines": {
+    "clarification": "Peça esclarecimentos se uma solicitação for ambígua.",
+    "reasoning": "Explique o raciocínio por trás de cada ação e chamada de ferramenta.",
+    "codeChanges": "Destaque alterações específicas de código e sua finalidade.",
+    "errorHandling": "Consulte guias de solução de problemas e logs para erros."
+  },
+  "nestjsGuidelines": {
+    "modules": "Estruture a aplicação em módulos coesos seguindo os princípios do NestJS.",
+    "providers": "Use injeção de dependência para serviços, repositórios e outros provedores.",
+    "controllers": "Mantenha os controladores responsáveis apenas por lidar com solicitações HTTP.",
+    "services": "Implemente a lógica de negócios em serviços."
+  },
+  "prismaGuidelines": {
+    "schema": "Mantenha o schema.prisma atualizado com modelos MongoDB apropriados.",
+    "transactions": "Use transações para operações que exigem integridade de dados.",
+    "migrations": "Gerencie alterações de esquema através de migrações do Prisma.",
+    "queries": "Otimize consultas para evitar problemas de N+1 e melhorar o desempenho."
+  },
+  "mongoDBGuidelines": {
+    "indexes": "Crie índices apropriados para consultas frequentes.",
+    "schemaDesign": "Projete o esquema para maximizar a performance de leitura e escrita.",
+    "embedded": "Use documentos incorporados quando apropriado para relações 1:1 e 1:N."
+  },
+  "reminders": {
+    "documentation": "Consulte regularmente a documentação do NestJS, Prisma e MongoDB para atualizações e melhores práticas.",
+    "agentMode": "Opere no modo Agent Composer para uso proativo de ferramentas e interação com a base de código."
+  }
+} 
