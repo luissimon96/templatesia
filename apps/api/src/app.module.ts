@@ -1,17 +1,24 @@
 import { Module } from '@nestjs/common';
 import { ThrottlerModule } from '@nestjs/throttler';
-import { APP_FILTER } from '@nestjs/core';
 import { AuthModule } from './auth/auth.module';
-<<<<<<< HEAD
-import { GlobalExceptionFilter } from './middleware/error-handling.middleware';
-import { env } from './config';
-=======
 import { UsersModule } from './users/users.module';
-import { validate } from './config/env.validation';
->>>>>>> dac5285b2e7058f2342b330a60f10e22fc903b4e
+import { TemplatesModule } from './templates/templates.module';
+import { CategoriesModule } from './categories/categories.module';
+import { TagsModule } from './tags/tags.module';
+import { ConfigModule } from './config/config.module';
+import { PrismaModule } from './prisma/prisma.module';
+import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
+import { ResponseTransformInterceptor } from './common/interceptors/response-transform.interceptor';
+import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 
 @Module({
   imports: [
+    // Configuração de variáveis de ambiente
+    ConfigModule,
+
+    // Módulo Prisma
+    PrismaModule,
+
     // Rate limiting
     ThrottlerModule.forRoot([{
       ttl: 60000, // 1 minuto
@@ -20,18 +27,22 @@ import { validate } from './config/env.validation';
 
     // Módulos da aplicação
     AuthModule,
+    UsersModule,
+    TemplatesModule,
+    CategoriesModule,
+    TagsModule,
   ],
   providers: [
-    // Filtro global de exceções
+    // Filtro global para exceções HTTP
     {
       provide: APP_FILTER,
-      useClass: GlobalExceptionFilter,
+      useClass: HttpExceptionFilter,
+    },
+    // Interceptor global para transformar respostas
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: ResponseTransformInterceptor,
     },
   ],
 })
-export class AppModule {
-  constructor() {
-    console.log(`API iniciada no ambiente: ${env.NODE_ENV}`);
-    console.log(`Porta: ${env.PORT}`);
-  }
-} 
+export class AppModule {} 
